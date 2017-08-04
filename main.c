@@ -59,6 +59,14 @@ static int nw_general_start_acquire_data(struct nodewatcher_module *module,
     }
   }
 
+  // Statistics.
+  blob_buf_init(&req, 0);
+  if (ubus_invoke(ubus, ubus_id, "get_statistics", req.head, nw_json_from_ubus, &data, 500) == UBUS_STATUS_OK) {
+    if (data) {
+      json_object_object_add(object, "statistics", data);
+    }
+  }
+
   return nw_module_finish_acquire_data(module, object);
 }
 
